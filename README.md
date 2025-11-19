@@ -57,21 +57,20 @@ Për ofruesit:
 1. Ofruesi 1:  
 
 $$
-p_1 = \frac{10}{10} = 1.00 = 100\mathrm{\%}
+p_1 = \frac{10}{10} = 1.00 = 100\mathrm{\\%}
 $$
-
 
 
 2. Ofruesi 2:  
 
 $$
-p_2 = \frac{48}{50} = 0.96 = 96\mathrm{\%}
+p_2 = \frac{48}{50} = 0.96 = 96\mathrm{\\%}
 $$  
 
 3. Ofruesi 3:  
 
 $$
-p_3 = \frac{186}{200} = 0.93 = 93\mathrm{\%}
+p_3 = \frac{186}{200} = 0.93 = 93\mathrm{\\%}
 $$
 
 
