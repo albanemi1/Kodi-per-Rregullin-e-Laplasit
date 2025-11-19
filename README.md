@@ -4,7 +4,7 @@
 
 ## 1. Qëllimi i projektit
 
-Qëllimi i këtij projekti është që, duke përdorur **Rregullin e Laplasit (Laplace’s rule of succession)** në kuadër të probabilitetit bayesian, të vendosim:
+Qëllimi i këtij projekti është që, duke përdorur **Rregullin e Laplace-it (Laplace’s rule of succession)** në kuadër të probabilitetit bayesian, të vendosim:
 
 > Nga cili ofrues në Amazon është më e arsyeshme të blihet produkti kur çmimi është pothuajse i njëjtë, por ndryshojnë **rating-et** (pozitiv / negativ) dhe **numri i vlerësimeve**?
 
@@ -169,7 +169,7 @@ ku:
 
 ---
 
-### 4.4. Rregulli i Laplasit
+### 4.4. Rregulli i Laplace-it
 
 Pyetja kryesore:
 
@@ -397,7 +397,7 @@ me_i_miri = max(
 ### 6) Mesazhi përfundimtar
 
 ```python
-print(f"\nSipas Laplasit, produkti më i besueshëm është: {me_i_miri}\n")
+print(f"\nSipas Laplace-it, produkti më i besueshëm është: {me_i_miri}\n")
 ```
 
 - **Çfarë bën:** Shtyp emrin e produktit me probabilitetin më të lartë të review-it pozitiv.
