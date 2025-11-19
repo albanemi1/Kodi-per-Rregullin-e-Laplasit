@@ -1,0 +1,67 @@
+# Laplace’s Rule of Succession — Produktet me Vlerësime Pozitive
+
+Projekt që demonstron përdorimin e **Rregullit të Laplace-it** për të vlerësuar
+probabilitetin real të një produkti për të marrë një vlerësim pozitiv, duke marrë
+parasysh numrin total të vlerësimeve.
+
+---
+
+## Problem Statement
+
+Na jepen tre produkte me rezultate pozitive/negative:
+
+| Produkti | Pozitive | Totali |
+|----------|----------|--------|
+| Produkti 1 | 10 | 10 |
+| Produkti 2 | 48 | 50 |
+| Produkti 3 | 186 | 200 |
+
+Detyra është të gjejmë:
+
+👉 **Cili produkt ka probabilitetin më të besueshëm?**  
+👉 Jo vetëm kush ka përqindjen më të madhe bruto, por kush ka rezultat më të qëndrueshëm statistikisht.
+
+Për këtë përdorim **Laplace’s Rule of Succession**.
+
+---
+
+## Formula
+
+Formula e Laplace-it për vlerësime binare:
+
+\[
+P = \frac{s + 1}{n + 2}
+\]
+
+ku:  
+- `s` = vlerësimet pozitive  
+- `n` = totali i vlerësimeve  
+
+---
+
+## Python Code
+
+```python
+def probabiliteti_laplace(s_pozitive, n_total):
+    return (s_pozitive + 1) / (n_total + 2)
+
+produktet = {
+    "Produkt 1": {"pozitive": 10, "total": 10},
+    "Produkt 2": {"pozitive": 48, "total": 50},
+    "Produkt 3": {"pozitive": 186, "total": 200},
+}
+
+print("\n--- Rezultatet duke përdorur Rregullin e Laplace-it ---\n")
+
+for emri, data in produktet.items():
+    laplace = probabiliteti_laplace(data["pozitive"], data["total"])
+    print(f"{emri}: probabiliteti ≈ {laplace:.4f} ({laplace*100:.2f}%)")
+
+me_i_miri = max(
+    produktet,
+    key=lambda p: probabiliteti_laplace(
+        produktet[p]["pozitive"], produktet[p]["total"]
+    )
+)
+
+print(f"\nSipas Laplasit, produkti më i besueshëm është: {me_i_miri}\n")
