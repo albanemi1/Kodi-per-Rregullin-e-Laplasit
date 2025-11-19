@@ -345,6 +345,15 @@ me_i_miri = max(
 
 print(f"\nSipas Laplace-it, produkti më i besueshëm është: {me_i_miri}\n")
 
+```
+### 1) Funksioni probabiliteti_laplace
+
+```python
+def probabiliteti_laplace(s_pozitive, n_total):
+    return (s_pozitive + 1) / (n_total + 2)}
+```
+- **Çfarë bën:** Llogarit probabilitetin e review-it të ardhshëm pozitiv duke përdorur formulën e Laplace-it.
+- **Pse duhet:** Kjo shmang vlerësimet ekstreme (0% ose 100%) kur kemi pak të dhëna, duke shtuar 1 sukses imagjinar dhe 1 dështim imagjinar.
 
 ### 2) Struktura e të dhënave për produktet
 
@@ -401,4 +410,22 @@ print(f"\nSipas Laplace-it, produkti më i besueshëm është: {me_i_miri}\n")
 
 - **Çfarë bën:** Shtyp emrin e produktit me probabilitetin më të lartë të review-it pozitiv.
 - **Pse duhet:** Jep një konkluzion të qartë për përdoruesin.
+
+### 7) Output i programit
+
+> Rezultati i ekzekutimit në terminal:
+
+``` 
+Rezultatet duke përdorur Rregullin e Laplace-it 
+
+Produkt 1: probabiliteti ≈ 0.9167 (91.67%)
+Produkt 2: probabiliteti ≈ 0.9423 (94.23%)
+Produkt 3: probabiliteti ≈ 0.9257 (92.57%)
+
+Sipas Laplace-it, produkti më i besueshëm është: Produkt 2
+```
+
+
+
+
 
