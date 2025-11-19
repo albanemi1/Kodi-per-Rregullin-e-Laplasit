@@ -1,88 +1,96 @@
-# Laplace’s Rule of Succession – Shembulli i rating-eve ne Amazon (Projekt ne Python)
+# Laplace’s Rule of Succession – Shembulli i rating-eve në Amazon (Projekt në Python)
 
 ---
 
-## 1. Qellimi i projektit
+## 1. Qëllimi i projektit
 
-Qellimi i ketij projekti eshte qe, duke perdorur **Rregullin e Laplace-it (Laplace’s rule of succession)** ne kuader te probabilitetit bayesian, te vendosim:
+Qëllimi i këtij projekti është që, duke përdorur **Rregullin e Laplasit (Laplace’s rule of succession)** në kuadër të probabilitetit bayesian, të vendosim:
 
-> Nga cili ofrues ne Amazon eshte me e arsyeshme te blihet produkti, kur cmimi eshte pothuajse i njejte, por ndryshojne **rating-et** (pozitiv / negativ) dhe **numri i vleresimeve**?
+> Nga cili ofrues në Amazon është më e arsyeshme të blihet produkti kur çmimi është pothuajse i njëjtë, por ndryshojnë **rating-et** (pozitiv / negativ) dhe **numri i vlerësimeve**?
 
-Hapat kryesore:
+Hapat kryesorë:
 
-1. Pershkrimi i sakte i problemit.
-2. Ndertimi i nje modeli probabilistik (Bernoulli + Beta).
-3. Derivimi i formulas se Laplace-it.
-4. Zbatimi i formulas ne **Python**.
-5. Analiza e detajuar e kodit, e ndare ne **blloqe**.
+1. Përshkrimi i saktë i problemit.
+2. Ndërtimi i një modeli probabilistik (Bernoulli + Beta).
+3. Derivimi i formulas së Laplas-it.
+4. Zbatimi i formulës në **Python**.
+5. Analiza e detajuar e kodit, e ndarë në **blloqe**.
 
-Ky README eshte i dizajnuar qe te mund te lexohet edhe nga dikush qe nuk ka shume njohuri paraprake ne probabilitet ose Python.
+Ky README është i dizajnuar në mënyrë që të mund të lexohet edhe nga dikush që nuk ka shumë njohuri paraprake në probabilitet ose Python.
 
 ---
 
-## 2. Pershkrimi i problemit (Detyra)
+## 2. Përshkrimi i problemit (Detyra)
 
-Amazon sugjeron **tre ofrues** te nje produkti:
+Amazon sugjeron **tre ofrues** të një produkti:
 
-- Cmimet: praktikisht te njejta.
-- Vendimi duhet te merret vetem nga **vleresimet e klienteve**.
+- Çmimet: praktikisht të njëjta.
+- Vendimi duhet të merret vetëm nga **vlerësimet e klientëve**.
 
-Te dhenat:
+Të dhënat:
 
-- **Ofruesi 1** – 10 vleresime, 100% pozitive  
-- **Ofruesi 2** – 50 vleresime, 96% pozitive  
-- **Ofruesi 3** – 200 vleresime, 93% pozitive  
+- **Ofruesi 1** – 10 vlerësime, 100% pozitive  
+- **Ofruesi 2** – 50 vlerësime, 96% pozitive  
+- **Ofruesi 3** – 200 vlerësime, 93% pozitive  
 
 Detyra:
 
-> Nga cili ofrues duhet blere produkti, nese synohet ai me **probabilitetin me te madh** qe review-i i ardhshem te jete pozitiv?
+> Nga cili ofrues duhet blerë produkti, nëse synohet ai me **probabilitetin më të madh** që review-i i ardhshëm të jetë pozitiv?
 
-Ketu nuk mjafton vetem perqindja naive. Duhet te merret parasysh edhe **numri i vleresimeve**. Kjo behet ne menyre elegante me **Laplace’s Rule of Succession**.
+Këtu nuk mjafton vetëm përqindja naive. Duhet të merret parasysh edhe **numri i vlerësimeve**. Kjo bëhet në mënyrë elegante me **Laplace’s Rule of Succession**.
 
 ---
 
-## 3. Qasja naive: frekuenca \(s/n\)
+## 3. Qasja naive: frekuenca $s/n$
 
-Qasja me e thjeshte per te vleresuar probabilitetin e review-it pozitiv eshte:
+Qasja më e thjeshtë për të vlerësuar probabilitetin e review-it pozitiv është:
 
-\[
-\hat{p} = \frac{s}{n}
-\]
+$$\{p} = \frac{s}{n}$$
 
 ku:
 
-- \(s\) = numri i review-eve **pozitive**,  
-- \(n\) = numri i review-eve **totale**.
+- $s$ = numri i review-eve **pozitive**  
+- $n$ = numri i review-eve **totale**
 
-Per ofruesit:
+Për ofruesit:
 
 1. Ofruesi 1:  
-   \[
-   \hat{p}_1 = \frac{10}{10} = 1.00 = 100\%
-   \]
-2. Ofruesi 2:  
-   \[
-   \hat{p}_2 = \frac{48}{50} = 0.96 = 96\%
-   \]
-3. Ofruesi 3:  
-   \[
-   \hat{p}_3 = \frac{186}{200} = 0.93 = 93\%
-   \]
 
-Sipas kesaj logjike naive, do te zgjidhnim **Ofruesin 1** (100%).
+$$
+p_1 = \frac{10}{10} = 1.00 = 100\mathrm{\%}
+$$
+
+
+
+2. Ofruesi 2:  
+
+$$
+p_2 = \frac{48}{50} = 0.96 = 96\mathrm{\%}
+$$  
+
+3. Ofruesi 3:  
+
+$$
+p_3 = \frac{186}{200} = 0.93 = 93\mathrm{\%}
+$$
+
+
+
+Sipas kësaj logjike naive, do të zgjidhnim **Ofruesin 1** (100\%).
 
 Problemi:
 
-- Ofruesi 1 ka vetem **10 vleresime** → shume pak te dhena.
-- Mjafton vetem nje review negativ dhe shkalla bie ne 90%.
-- Ofruesi 3 ka **200 vleresime** → shume me shume informata, megjithese perqindja eshte me e ulet.
+- Ofruesi 1 ka vetëm **10 vlerësime** → shumë pak të dhëna.
+- Mjafton vetëm një review negativ dhe shkalla bie në 90\%.
+- Ofruesi 3 ka **200 vlerësime** → shumë më shumë informata, megjithëse përqindja është më e ulët.
 
-Pra, qasja naive nuk e dallon qarte ndryshimin ndermjet:
+Pra, qasja naive nuk e dallon qartë ndryshimin ndërmjet:
 
-- **perqindjes se suksesit** (s/n),
-- dhe **volumit te te dhenave** (n).
+- **përqindjes së suksesit** ($s/n$),
+- dhe **volumit të të dhënave** ($n$).
 
-Duhet nje qasje me e kujdesshme – ketu futet **Bayes** dhe **Laplace**.
+Duhet një qasje më e kujdesshme – këtu futen **Bayes** dhe **Laplace**.
+
 
 ---
 
@@ -92,134 +100,135 @@ Duhet nje qasje me e kujdesshme – ketu futet **Bayes** dhe **Laplace**.
 
 Supozimet:
 
-- review pozitiv → e modelojme si 1,  
-- review negativ → e modelojme si 0.
+- review pozitiv → e modelojmë si **1**,  
+- review negativ → e modelojmë si **0**.
 
-Secili review eshte eksperiment **Bernoulli** me probabilitet:
+Secili review është eksperiment **Bernoulli** me probabilitet:
 
-\[
+$$
 P(\text{review pozitiv}) = \theta, \quad
 P(\text{review negativ}) = 1 - \theta
-\]
+$$
 
-Per secilin ofrues kemi nje \(\theta\) te ndryshem:
+Për secilin ofrues kemi një vlerë të ndryshme të $\theta$:
 
-- \(\theta_1\) – probabiliteti i review pozitiv per Ofruesin 1,  
-- \(\theta_2\) – probabiliteti i review pozitiv per Ofruesin 2,  
-- \(\theta_3\) – probabiliteti i review pozitiv per Ofruesin 3.
+- $\theta_1$ – probabiliteti i review-ve pozitive për Ofruesin 1  
+- $\theta_2$ – probabiliteti i review-ve pozitive për Ofruesin 2  
+- $\theta_3$ – probabiliteti i review-ve pozitive për Ofruesin 3  
 
-Nese per nje ofrues kemi:
+Nëse për një ofrues kemi:
 
-- \(s\) review pozitive,
-- \(f\) review negative,
-- \(n = s + f\) review gjithsej,
+- $s$ review pozitive  
+- $f$ review negative  
+- $n = s + f$ review gjithsej  
 
-atehere **likelihood** i te dhenave (probabiliteti i te dhenave nese \(\theta\) eshte e dhene) eshte:
+atëherë **likelihood** i të dhënave (probabiliteti i të dhënave duke supozuar se $\theta$ është e dhënë) është:
 
-\[
-P(\text{te dhenat} \mid \theta) = \theta^{s}(1 - \theta)^{f}
-\]
-
----
-
-### 4.2. Prior – cfare dim para te dhenave?
-
-Para se te vleresohen review-et, supozojme qe:
-
-- nuk kemi arsye te dyshojme qe produkti eshte shume i mire apo shume i keq,
-- te gjitha vlerat e \(\theta\) ne \([0, 1]\) jane **po aq te mundshme**.
-
-Kjo pershkruhet me shperndarjen:
-
-\[
-\theta \sim \text{Beta}(1, 1)
-\]
-
-Beta(1,1) eshte **shperndarje uniforme** ne \([0,1]\).
+$$
+P(\text{të dhënat} \mid \theta) = \theta^s (1 - \theta)^f
+$$
 
 ---
 
-### 4.3. Posteriori – pas vleresimeve
 
-Duke perdorur rregullin e Bayes:
+### 4.2. Prior – çfarë dimë para të dhënave?
 
-\[
-P(\theta \mid \text{te dhenat}) \propto P(\text{te dhenat} \mid \theta)\, P(\theta)
-\]
+Para se të vlerësohen review-et, supozojmë që:
 
-Per prior Beta(1,1) dhe likelihood Bernoulli, rezultati standard eshte:
+- nuk kemi arsye të dyshojmë që produkti është shumë i mirë apo shumë i keq,
+- të gjitha vlerat e $\theta$ në intervalin $[0, 1]$ janë **po aq të mundshme**.
 
-\[
-\theta \mid \text{te dhenat} \sim \text{Beta}(1 + s,\ 1 + f)
-\]
+Kjo përshkruhet me shpërndarjen prior:
+
+$$
+\theta \sim \text{Beta}(1,1)
+$$
+
+$\text{Beta}(1,1)$ është **shpërndarje uniforme** në $[0,1]$, që do të thotë se nuk favorizon asnjë vlerë të veçantë të $\theta$ para se të shohim të dhënat.
+
+---
+
+### 4.3. Posteriori – pas vlerësimeve
+
+Duke përdorur rregullin e Bayes:
+
+$$
+P(\theta \mid \text{të dhënat}) \propto P(\text{të dhënat} \mid \theta)\, P(\theta)
+$$
+
+Për prior $\text{Beta}(1,1)$ dhe likelihood Bernoulli, rezultati standard është:
+
+$$
+\theta \mid \text{të dhënat} \sim \text{Beta}(1 + s,\ 1 + f)
+$$
 
 ku:
 
-- \(s\) = numri i review-eve pozitive,  
-- \(f = n - s\) = numri i review-eve negative.
+- $s$ = numri i review-eve **pozitive**
+- $f = n - s$ = numri i review-eve **negative**
 
 ---
 
-### 4.4. Rregulli i Laplace-it
+### 4.4. Rregulli i Laplasit
 
 Pyetja kryesore:
 
-> Cili eshte probabiliteti qe **review-i i ardhshem** te jete pozitiv?
+> **Cili është probabiliteti që review-i i ardhshëm të jetë pozitiv?**
 
-Ne qasjen bayesiane, ky probabilitet eshte **vlera e pritur** (expected value) e \(\theta\)-s sipas shperndarjes posterior.
+Në qasjen bayesiane, ky probabilitet është **vlera e pritur (expected value)** e $\theta$-s sipas shpërndarjes posterior.
 
-Per nje shperndarje Beta(\(\alpha,\beta\)) vlen:
+Për një shpërndarje $\text{Beta}(\alpha, \beta)$ vlen:
 
-\[
+$$
 \mathbb{E}[\theta] = \frac{\alpha}{\alpha + \beta}
-\]
+$$
 
-Ne rastin tone:
+Në rastin tonë:
 
-- \(\alpha = 1 + s\),
-- \(\beta = 1 + f\),
-- dhe \(n = s + f\).
+- $\alpha = 1 + s$
+- $\beta = 1 + f$
+- $n = s + f$
 
 Prandaj:
 
-\[
-\mathbb{E}[\theta \mid \text{te dhenat}] =
-\frac{1 + s}{1 + s + 1 + f} =
-\frac{s + 1}{n + 2}
-\]
+$$
+\mathbb{E}[\theta \mid \text{të dhënat}]
+= \frac{1 + s}{1 + s + 1 + f}
+= \frac{s + 1}{n + 2}
+$$
 
-Ky eshte **Rregulli i Laplace-it**:
+Ky është **Rregulli i Laplace-it**:
 
-\[
+$$
 \boxed{p_{\text{Laplace}} = \frac{s + 1}{n + 2}}
-\]
+$$
 
 Interpretim:
 
-- sikur te shtonim **1 sukses imagjinar** dhe **1 deshtim imagjinar**;
-- kjo ben qe te mos kemi kurrre probabilitet 0% apo 100% me numer te vogel te dhenash.
+- sikur të shtonim **1 sukses imagjinar** dhe **1 dështim imagjinar**,  
+- kjo shmang vlerësimet ekstreme (0% apo 100%) kur kemi pak të dhëna.
 
 ---
 
-## 5. Laplace per tre ofruesit
+## 5. Laplasi për tre ofruesit
 
 ### 5.1. Ofruesi 1
 
-Te dhenat:
+Të dhënat për Ofruesin 1:
 
-- \(s_1 = 10\) pozitive,  
-- \(n_1 = 10\) gjithsej.
+- $s_1 = 10$ review pozitive  
+- $n_1 = 10$ review gjithsej  
 
 Formula:
 
-\[
+$$
 p_1 = \frac{s_1 + 1}{n_1 + 2}
-    = \frac{10 + 1}{10 + 2}
-    = \frac{11}{12}
-    \approx 0.9167
-\]
+     = \frac{10 + 1}{10 + 2}
+     = \frac{11}{12}
+     \approx 0.9167
+$$
 
-Pra probabiliteti i review-it te ardhshem pozitiv eshte ≈ **91.67%**.
+Pra probabiliteti që review-i i ardhshëm të jetë pozitiv është ≈ **91.67%**.
 
 ---
 
@@ -227,30 +236,30 @@ Pra probabiliteti i review-it te ardhshem pozitiv eshte ≈ **91.67%**.
 
 Ofruesi 2:
 
-- 50 vleresime,
-- 96% pozitive.
+- 50 vlerësime  
+- 96% pozitive  
 
 Numri i review-eve pozitive:
 
-\[
+$$
 s_2 = 0.96 \cdot 50 = 48
-\]
+$$
 
-Te dhenat:
+Të dhënat:
 
-- \(s_2 = 48\),
-- \(n_2 = 50\).
+- $s_2 = 48$  
+- $n_2 = 50$  
 
 Formula:
 
-\[
+$$
 p_2 = \frac{s_2 + 1}{n_2 + 2}
     = \frac{48 + 1}{50 + 2}
     = \frac{49}{52}
     \approx 0.9423
-\]
+$$
 
-Pra probabiliteti i review-it te ardhshem pozitiv eshte ≈ **94.23%**.
+Pra probabiliteti që review-i i ardhshëm të jetë pozitiv është ≈ **94.23%**.
 
 ---
 
@@ -258,57 +267,58 @@ Pra probabiliteti i review-it te ardhshem pozitiv eshte ≈ **94.23%**.
 
 Ofruesi 3:
 
-- 200 vleresime,
-- 93% pozitive.
+- 200 vlerësime  
+- 93% pozitive  
 
 Numri i review-eve pozitive:
 
-\[
+$$
 s_3 = 0.93 \cdot 200 = 186
-\]
+$$
 
-Te dhenat:
+Të dhënat:
 
-- \(s_3 = 186\),
-- \(n_3 = 200\).
+- $s_3 = 186$  
+- $n_3 = 200$  
 
 Formula:
 
-\[
+$$
 p_3 = \frac{s_3 + 1}{n_3 + 2}
     = \frac{186 + 1}{200 + 2}
     = \frac{187}{202}
     \approx 0.9257
-\]
+$$
 
-Pra probabiliteti i review-it te ardhshem pozitiv eshte ≈ **92.57%**.
+Pra probabiliteti që review-i i ardhshëm të jetë pozitiv është ≈ **92.57%**.
+
 
 ---
 
 ### 5.4. Krahasimi i rezultateve
 
-| Ofruesi | \(s\) (pozitive) | \(n\) (totali) | Naive \(s/n\) | Laplace \((s+1)/(n+2)\) | Laplace (%) |
-|--------:|------------------|----------------|---------------|-------------------------|-------------|
-| 1       | 10               | 10             | 1.0000        | 0.9167                  | 91.67%      |
-| 2       | 48               | 50             | 0.9600        | 0.9423                  | 94.23%      |
-| 3       | 186              | 200            | 0.9300        | 0.9257                  | 92.57%      |
+| Ofruesi | $s$ (pozitive) | $n$ (totali) | Naive $s/n$ | Laplace $(s+1)/(n+2)$ | Laplace (%) |
+|--------:|----------------|--------------|-------------|------------------------|-------------|
+| 1       | 10             | 10           | 1.0000      | 0.9167                 | 91.67%      |
+| 2       | 48             | 50           | 0.9600      | 0.9423                 | 94.23%      |
+| 3       | 186            | 200          | 0.9300      | 0.9257                 | 92.57%      |
 
-Renditja sipas probabilitetit te Laplace-it:
+Renditja sipas probabilitetit të Laplace-it:
 
-\[
+$$
 p_2 > p_3 > p_1
-\]
+$$
 
 Prandaj:
 
-> **Ofruesi 2** eshte zgjedhja me e arsyeshme sipas Laplace’s rule of succession.
+> **Ofruesi 2** është zgjedhja më e arsyeshme sipas *Laplace’s rule of succession*.
 
 ---
 
-## 6. Kodi i plote ne Python
+## 6. Kodi i plotë në Python
 
-Me poshte eshte kodi i plote i Python qe perdor Rregullin e Laplace-it per tre produktet.  
-Kodi eshte pa komente brenda; komentet dhe shpjegimet jane me poshte, te ndara ne **blloqe**.
+Më poshtë është kodi i plotë i Python që përdor Rregullin e Laplace-it për tre produktet.  
+Kodi është pa komente brenda; komentet dhe shpjegimet janë më poshtë, të ndara në **blloqe**.
 
 ```python
 def probabiliteti_laplace(s_pozitive, n_total):
@@ -321,7 +331,7 @@ produktet = {
     "Produkt 3": {"pozitive": 186, "total": 200},
 }
 
-print("\n--- Rezultatet duke perdorur Rregullin e Laplace-it ---\n")
+print("\n--- Rezultatet duke përdorur Rregullin e Laplace-it ---\n")
 
 for emri, data in produktet.items():
     laplace = probabiliteti_laplace(data["pozitive"], data["total"])
@@ -334,19 +344,8 @@ me_i_miri = max(
     ),
 )
 
-print(f"\nSipas Laplasit, produkti me i besueshem eshte: {me_i_miri}\n")
+print(f"\nSipas Laplace-it, produkti më i besueshëm është: {me_i_miri}\n")
 
-## Shpjegimi i kodit në blloqe
-
-### 1) Funksioni `probabiliteti_laplace`
-
-```python
-def probabiliteti_laplace(s_pozitive, n_total):
-    return (s_pozitive + 1) / (n_total + 2)
-```
-
-- **Çfarë bën:** Llogarit probabilitetin e review-it të ardhshëm që të jetë pozitiv, duke aplikuar formulën e Laplace-it. 
-- **Pse duhet:** Ky funksion përfshin “suksesin” dhe “dështimin” imagjinar (+1 në numërues dhe +2 në emërues) për të amortizuar efektin e mostrës së vogël.
 
 ### 2) Struktura e të dhënave për produktet
 
